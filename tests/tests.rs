@@ -1,18 +1,30 @@
 use lazy_static::*;
-use std::env::current_dir;
 use spcsv::file_manager::File;
+use std::env::current_dir;
 
 lazy_static! {
-    static ref SAMPLE1: File = File::new(&format!("{}/tests/sample-1.csv", current_dir().unwrap().display()), true).unwrap();
-    static ref SAMPLE2: File = File::new(&format!("{}/tests/sample-2.csv", current_dir().unwrap().display()), true).unwrap();
-    static ref SAMPLE3: File = File::new(&format!("{}/tests/sample-3.csv", current_dir().unwrap().display()), true).unwrap();
+    static ref SAMPLE1: File = File::new(
+        &format!("{}/tests/sample-1.csv", current_dir().unwrap().display()),
+        true
+    )
+    .unwrap();
+    static ref SAMPLE2: File = File::new(
+        &format!("{}/tests/sample-2.csv", current_dir().unwrap().display()),
+        true
+    )
+    .unwrap();
+    static ref SAMPLE3: File = File::new(
+        &format!("{}/tests/sample-3.csv", current_dir().unwrap().display()),
+        true
+    )
+    .unwrap();
 }
 
 #[cfg(test)]
 mod file_manager {
-    use std::env::current_dir;
-    use spcsv::file_manager::*;
     use crate::*;
+    use spcsv::file_manager::*;
+    use std::env::current_dir;
 
     #[test]
     fn count_lines_test() {
@@ -46,25 +58,38 @@ mod file_manager {
 
     #[test]
     fn file_path() {
-        let f : Option<File> = File::new(&format!("{}/tests/sample-3.csv", current_dir().unwrap().display()), true);
+        let f: Option<File> = File::new(
+            &format!("{}/tests/sample-3.csv", current_dir().unwrap().display()),
+            true,
+        );
         assert_eq!(true, f.is_some())
     }
 
     #[test]
     fn bad_file_path() {
-        let f : Option<File> = File::new(&format!("{}/tests/sample-3", current_dir().unwrap().display()), true);
+        let f: Option<File> = File::new(
+            &format!("{}/tests/sample-3", current_dir().unwrap().display()),
+            true,
+        );
         assert_eq!(true, f.is_none())
     }
 }
 
 #[cfg(test)]
 mod lib {
-    use spcsv::{gen_names, lines_per_file};
     use crate::*;
+    use spcsv::{gen_names, lines_per_file};
 
     #[test]
     fn get_names() {
-        assert_eq!(gen_names(&SAMPLE3, 3), Vec::<String>::from(["sample-3_1.csv".to_string(), "sample-3_2.csv".to_string(), "sample-3_3.csv".to_string()]))
+        assert_eq!(
+            gen_names(&SAMPLE3, 3),
+            Vec::<String>::from([
+                "sample-3_1.csv".to_string(),
+                "sample-3_2.csv".to_string(),
+                "sample-3_3.csv".to_string()
+            ])
+        )
     }
 
     #[test]

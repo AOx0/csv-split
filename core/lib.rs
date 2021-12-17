@@ -1,6 +1,6 @@
-use std::process::exit;
 use crate::args::Args;
 use file_manager::File;
+use std::process::exit;
 
 pub mod args;
 pub mod file_manager;
@@ -8,7 +8,7 @@ pub mod file_manager;
 pub fn app(args: Option<Args>) {
     let args: Args = match args {
         Some(a) => a,
-        None => Args::load()
+        None => Args::load(),
     };
 
     println!("{:?}", args);
@@ -16,10 +16,10 @@ pub fn app(args: Option<Args>) {
 
 pub fn lines_per_file(file: &File, n_files: usize) -> Option<(usize, usize)> {
     let total_lines = file.lines() - file.header();
-    let lines =  total_lines as f32 / n_files as f32;
+    let lines = total_lines as f32 / n_files as f32;
 
     if lines < 1.0 {
-        None
+        None /* Cant place less than row in each file */
     } else {
         let lines = lines.floor() as usize;
         Some((lines, total_lines - lines * n_files))

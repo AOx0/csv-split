@@ -6,13 +6,16 @@ use std::path::Path;
 pub struct File {
     file: indexed_file::File,
     file_fs: Box<Path>,
-    header_line: bool
+    header_line: bool,
 }
-
 
 impl File {
     pub fn header(&self) -> usize {
-        if self.header_line == true { 1 } else { 0 }
+        if self.header_line == true {
+            1
+        } else {
+            0
+        }
     }
 
     pub fn lines(&self) -> usize {
@@ -34,14 +37,14 @@ impl File {
         Some(File {
             file,
             file_fs: Box::from(Path::new(file_path)),
-            header_line
+            header_line,
         })
     }
 
     pub fn base_name(&self) -> Option<String> {
         let name = self.name().to_lowercase();
 
-         if name.to_lowercase().contains(".csv") {
+        if name.to_lowercase().contains(".csv") {
             Some(name.replace(".csv", ""))
         } else {
             None

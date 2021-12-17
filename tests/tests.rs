@@ -3,9 +3,9 @@ use std::env::current_dir;
 use spcsv::file_manager::File;
 
 lazy_static! {
-    static ref SAMPLE1: File = File::new(&format!("{}/tests/sample-1.csv", current_dir().unwrap().display())).unwrap();
-    static ref SAMPLE2: File = File::new(&format!("{}/tests/sample-2.csv", current_dir().unwrap().display())).unwrap();
-    static ref SAMPLE3: File = File::new(&format!("{}/tests/sample-3.csv", current_dir().unwrap().display())).unwrap();
+    static ref SAMPLE1: File = File::new(&format!("{}/tests/sample-1.csv", current_dir().unwrap().display()), true).unwrap();
+    static ref SAMPLE2: File = File::new(&format!("{}/tests/sample-2.csv", current_dir().unwrap().display()), true).unwrap();
+    static ref SAMPLE3: File = File::new(&format!("{}/tests/sample-3.csv", current_dir().unwrap().display()), true).unwrap();
 }
 
 #[cfg(test)]
@@ -46,20 +46,20 @@ mod file_manager {
 
     #[test]
     fn file_path() {
-        let f : Option<File> = File::new(&format!("{}/tests/sample-3.csv", current_dir().unwrap().display()));
+        let f : Option<File> = File::new(&format!("{}/tests/sample-3.csv", current_dir().unwrap().display()), true);
         assert_eq!(true, f.is_some())
     }
 
     #[test]
     fn bad_file_path() {
-        let f : Option<File> = File::new(&format!("{}/tests/sample-3", current_dir().unwrap().display()));
+        let f : Option<File> = File::new(&format!("{}/tests/sample-3", current_dir().unwrap().display()), true);
         assert_eq!(true, f.is_none())
     }
 }
 
 #[cfg(test)]
 mod lib {
-    use spcsv::gen_names;
+    use spcsv::{gen_names, lines_per_file};
     use crate::*;
 
     #[test]
@@ -68,7 +68,12 @@ mod lib {
     }
 
     #[test]
-    fn calc_files_to_create() {
+    fn n_lines_per_file() {
+        assert!(lines_per_file(&SAMPLE1, 50).is_some())
+    }
 
+    #[test]
+    fn bad_n_lines_per_file() {
+        assert!(lines_per_file(&SAMPLE2, 150).is_none())
     }
 }

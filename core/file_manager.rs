@@ -6,10 +6,15 @@ use std::path::Path;
 pub struct File {
     file: indexed_file::File,
     file_fs: Box<Path>,
+    header_line: bool
 }
 
 
 impl File {
+    pub fn header(&self) -> usize {
+        if self.header_line == true { 1 } else { 0 }
+    }
+
     pub fn lines(&self) -> usize {
         self.file.total_lines()
     }
@@ -18,17 +23,18 @@ impl File {
         String::from(self.file_fs.file_name().unwrap().to_str().unwrap())
     }
 
-    pub fn new(file: &str) -> Option<File> {
-        let file_indexed = if let Ok(file) = indexed_file::File::open_raw(file) {
-            file
+    pub fn new(file_path: &str, header_line: bool) -> Option<File> {
+        let file = if let Ok(file_path) = indexed_file::File::open_raw(file_path) {
+            file_path
         } else {
             eprintln!("No such file found");
             return None;
         };
 
         Some(File {
-            file: file_indexed,
-            file_fs: Box::from(Path::new(file))
+            file,
+            file_fs: Box::from(Path::new(file_path)),
+            header_line
         })
     }
 

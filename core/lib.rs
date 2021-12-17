@@ -33,7 +33,7 @@ pub fn gen_names(file: &File, n_files: i32) -> Vec<String> {
     });
 
     for n in 1..=n_files {
-        result.push(format!("{}_{}.csv", base_name, n_files));
+        result.push(format!("{}_{}.csv", base_name, n));
     }
 
     result

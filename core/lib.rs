@@ -19,7 +19,7 @@ pub fn lines_per_file(file: &File, n_files: usize) -> Option<(usize, usize)> {
     let lines = total_lines as f32 / n_files as f32;
 
     if lines < 1.0 {
-        None /* Cant place less than row in each file */
+        None /* Cant place less than a row in each file */
     } else {
         let lines = lines.floor() as usize;
         Some((lines, total_lines - lines * n_files))

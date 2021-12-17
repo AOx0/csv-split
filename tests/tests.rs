@@ -23,7 +23,6 @@ lazy_static! {
 #[cfg(test)]
 mod file_manager {
     use crate::*;
-    use spcsv::file_manager::*;
     use std::env::current_dir;
 
     #[test]
@@ -93,12 +92,26 @@ mod lib {
     }
 
     #[test]
-    fn n_lines_per_file() {
+    fn valid_lines_per_file() {
         assert!(lines_per_file(&SAMPLE1, 50).is_some())
     }
 
     #[test]
-    fn bad_n_lines_per_file() {
+    fn invalid_lines_per_file() {
         assert!(lines_per_file(&SAMPLE2, 150).is_none())
+    }
+
+    #[test]
+    fn n_lines_per_file_sample1() {
+        let (each, remain) = lines_per_file(&SAMPLE1, 13).unwrap();
+        assert_eq!(each, 76);
+        assert_eq!(remain, 12);
+    }
+
+    #[test]
+    fn n_lines_per_file_sample2() {
+        let (each, remain) = lines_per_file(&SAMPLE2, 19).unwrap();
+        assert_eq!(each, 5);
+        assert_eq!(remain, 5);
     }
 }

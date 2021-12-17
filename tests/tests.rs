@@ -1,43 +1,47 @@
+use lazy_static::*;
+use std::env::current_dir;
+use spcsv::file_manager::File;
+
+lazy_static! {
+    static ref SAMPLE1: File = File::new(&format!("{}/tests/sample-1.csv", current_dir().unwrap().display())).unwrap();
+    static ref SAMPLE2: File = File::new(&format!("{}/tests/sample-2.csv", current_dir().unwrap().display())).unwrap();
+    static ref SAMPLE3: File = File::new(&format!("{}/tests/sample-3.csv", current_dir().unwrap().display())).unwrap();
+}
+
 #[cfg(test)]
 mod file_manager {
     use std::env::current_dir;
     use spcsv::file_manager::*;
+    use crate::*;
 
     #[test]
     fn count_lines_test() {
-        let f : File = File::new(&format!("{}/tests/sample-1.csv", current_dir().unwrap().display())).unwrap();
-        assert_eq!(1001, f.lines())
+        assert_eq!(1001, SAMPLE1.lines())
     }
 
     #[test]
     fn bad_count_lines_test() {
-        let f : File = File::new(&format!("{}/tests/sample-2.csv", current_dir().unwrap().display())).unwrap();
-        assert_ne!(1001, f.lines())
+        assert_ne!(1001, SAMPLE2.lines())
     }
-
 
     #[test]
     fn get_file_name() {
-        let f : File = File::new(&format!("{}/tests/sample-2.csv", current_dir().unwrap().display())).unwrap();
-        assert_eq!("sample-2.csv", f.name())
+        assert_eq!("sample-2.csv", SAMPLE2.name())
     }
 
     #[test]
     fn bad_get_file_name() {
-        let f : File = File::new(&format!("{}/tests/sample-3.csv", current_dir().unwrap().display())).unwrap();
-        assert_ne!("sample-2.csv", f.name())
+        assert_ne!("sample-2.csv", SAMPLE3.name())
     }
 
     #[test]
     fn get_file_base_name() {
-        let f : File = File::new(&format!("{}/tests/sample-2.csv", current_dir().unwrap().display())).unwrap();
-        assert_eq!("sample-2", f.base_name().unwrap())
+        assert_eq!("sample-2", SAMPLE2.base_name().unwrap())
     }
 
     #[test]
     fn bad_get_file_base_name() {
-        let f : File = File::new(&format!("{}/tests/sample-3.csv", current_dir().unwrap().display())).unwrap();
-        assert_ne!("sample-2", f.base_name().unwrap())
+        assert_ne!("sample-2", SAMPLE3.base_name().unwrap())
     }
 
     #[test]
@@ -56,12 +60,15 @@ mod file_manager {
 #[cfg(test)]
 mod lib {
     use spcsv::gen_names;
-    use std::env::current_dir;
-    use spcsv::file_manager::*;
+    use crate::*;
 
     #[test]
     fn get_names() {
-        let f : File = File::new(&format!("{}/tests/sample-3.csv", current_dir().unwrap().display())).unwrap();
-        assert_eq!(gen_names(f, 3), Vec::<String>::from(["sample-3-1".to_string(), "sample-3-2".to_string(), "sample-3-3".to_string()]))
+        assert_eq!(gen_names(&SAMPLE3, 3), Vec::<String>::from(["sample-3_1.csv".to_string(), "sample-3_2.csv".to_string(), "sample-3_3.csv".to_string()]))
+    }
+
+    #[test]
+    fn calc_files_to_create() {
+
     }
 }

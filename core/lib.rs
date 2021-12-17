@@ -1,4 +1,3 @@
-use std::ops::Range;
 use std::process::exit;
 use crate::args::Args;
 use file_manager::File;
@@ -15,16 +14,18 @@ pub fn app(args: Option<Args>) {
     println!("{:?}", args);
 }
 
+pub fn calc_files_to_create(file: &File, n: i32) -> usize {
+    (file.lines() as f32 / n as f32).ceil() as usize
+}
 
-
-pub fn gen_names(file: File, n: i32) -> Vec<String> {
+pub fn gen_names(file: &File, n: i32) -> Vec<String> {
     let mut result = Vec::<String>::new();
     let base_name = file.base_name().unwrap_or_else(|| {
         exit(0);
     });
 
     for n in 1..=n {
-        result.push(format!("{}-{}", base_name, n));
+        result.push(format!("{}_{}.csv", base_name, n));
     }
 
     result

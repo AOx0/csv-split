@@ -177,6 +177,7 @@ dependencies = [
  "clap",
  "fs_extra",
  "indexed_file",
+ "lazy_static",
 ]
 
 [[package]]

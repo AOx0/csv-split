@@ -9,7 +9,7 @@ pub struct Args {
 
     /// The number of files to be created with the contents of the original file
     #[clap(required = true)]
-    pub(crate) number_of_files: i32,
+    pub(crate) number_of_files: usize,
 }
 
 impl Args { pub fn load() -> Args { Args::parse() } }

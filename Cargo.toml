@@ -1,0 +1,13 @@
+[package]
+name = "split-csv"
+description = "Split a lage csv file into multiple files"
+version = "1.0.0"
+edition = "2021"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[[bin]]
+name = "split-csv"
+path = "src/main.rs"
+
+[dependencies]

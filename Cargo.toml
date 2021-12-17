@@ -1,7 +1,16 @@
 [package]
 name = "split-csv"
+authors = ["AOx0"]
+
+readme = "Readme.md"
+repository = "https://github.com/AOx0/csv-split"
+
 description = "Split a lage csv file into multiple files"
+categories = ["command-line-utilities"]
+
 version = "0.1.0"
+
+rust-version = "1.57"
 edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html

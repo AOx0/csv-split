@@ -1,6 +1,6 @@
 # split-csv
 
-Simple command to split in n files the contents of one big csv.
+Simple command to split into n files the contents of one big csv.
 
 
 

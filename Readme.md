@@ -30,7 +30,7 @@ spcsv COVID19.csv 100
 
 
 
-The example above will split the lines of `COVID19.csv` along a hundred files names `COVID19-1.csv`, `COVID19-2.csv`, `...`
+The example above will split the lines of `COVID19.csv` along a hundred files with the names: `COVID19_1.csv`, `COVID19_2.csv`, `COVID19_3.csv`, `...`
 
 
 

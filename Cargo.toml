@@ -11,3 +11,4 @@ name = "spcsv"
 path = "src/main.rs"
 
 [dependencies]
+clap = { version="3.0.0-rc.7", features=["derive"]}

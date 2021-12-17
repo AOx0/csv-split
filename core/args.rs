@@ -5,11 +5,11 @@ use clap::{ColorChoice, Parser};
 pub struct Args {
     /// The csv file to split
     #[clap(required = true)]
-    file: String,
+    pub(crate) file: String,
 
     /// The number of files to be created with the contents of the original file
     #[clap(required = true)]
-    number_of_files: i32,
+    pub(crate) number_of_files: i32,
 }
 
 impl Args { pub fn load() -> Args { Args::parse() } }

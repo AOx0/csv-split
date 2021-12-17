@@ -18,12 +18,16 @@ edition = "2021"
 
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
+[lib]
+name = "spcsv"
+path = "core/lib.rs"
+
 [[bin]]
 name = "spcsv"
 path = "src/main.rs"
 
 [[test]]
-name = "spcsv-tests"
+name = "spcsv tests"
 path = "tests/tests.rs"
 
 [dependencies]

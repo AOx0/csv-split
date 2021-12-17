@@ -1,4 +1,6 @@
 mod args;
+mod file_manager;
+
 
 fn main() {
     let args = args::Args::load();

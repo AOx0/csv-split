@@ -1,7 +1,7 @@
 use clap::{ColorChoice, Parser};
 
 #[derive(Parser, Debug)]
-#[clap(about, version, name="spcsv", author, color(ColorChoice::Never))]
+#[clap(about, version, name="spcsv", color(ColorChoice::Never))]
 pub struct Args {
     /// The csv file to split
     #[clap(required = true)]

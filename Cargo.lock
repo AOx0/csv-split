@@ -80,6 +80,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "indexed_file"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "b8703d7abca51dade9fc2f02d9c6c0b99deaf951b837908d715f22a93877353b"
+
+[[package]]
 name = "indexmap"
 version = "1.7.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -163,6 +169,7 @@ name = "split-csv"
 version = "0.0.1"
 dependencies = [
  "clap",
+ "indexed_file",
 ]
 
 [[package]]

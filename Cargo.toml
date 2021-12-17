@@ -27,7 +27,7 @@ name = "spcsv"
 path = "src/main.rs"
 
 [[test]]
-name = "spcsv tests"
+name = "spcsv-tests"
 path = "tests/tests.rs"
 
 [dependencies]

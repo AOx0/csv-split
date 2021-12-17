@@ -6,7 +6,7 @@ pub struct File {
 
 
 impl File {
-    pub fn lines(self) -> usize {
+    pub fn lines(&self) -> usize {
         self.file.total_lines()
     }
 

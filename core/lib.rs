@@ -1,3 +1,4 @@
+use std::ops::Range;
 use std::process::exit;
 use crate::args::Args;
 use file_manager::File;
@@ -17,8 +18,14 @@ pub fn app(args: Option<Args>) {
 
 
 pub fn gen_names(file: File, n: i32) -> Vec<String> {
+    let mut result = Vec::<String>::new();
+    let base_name = file.base_name().unwrap_or_else(|| {
+        exit(0);
+    });
 
-    let base_name = file.base_name();
-    println!("{:?}", 3);
-    Vec::<String>::new()
+    for n in 1..=n {
+        result.push(format!("{}-{}", base_name, n));
+    }
+
+    result
 }

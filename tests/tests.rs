@@ -52,3 +52,16 @@ mod file_manager {
         assert_eq!(true, f.is_none())
     }
 }
+
+#[cfg(test)]
+mod lib {
+    use spcsv::gen_names;
+    use std::env::current_dir;
+    use spcsv::file_manager::*;
+
+    #[test]
+    fn get_names() {
+        let f : File = File::new(&format!("{}/tests/sample-3.csv", current_dir().unwrap().display())).unwrap();
+        assert_eq!(gen_names(f, 3), Vec::<String>::from(["sample-3-1".to_string(), "sample-3-2".to_string(), "sample-3-3".to_string()]))
+    }
+}

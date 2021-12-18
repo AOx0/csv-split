@@ -13,7 +13,7 @@ pub struct Args {
 
     /// Flag to indicate the first line of FILE is a header line
     #[clap(short, long)]
-    pub(crate) signed_file: bool,
+    pub(crate) not_signed_file: bool,
 
     /// Flag to write remaining lines at an extra file (NUMBER_OF_FILES + 1).
     /// When disabled writes remaining rows to the last file (NUMBER_OF_FILES)

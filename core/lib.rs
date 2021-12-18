@@ -17,7 +17,7 @@ pub fn app(args: Option<Args>) {
         None => Args::load(),
     };
 
-    let file = File::new(&args.file, args.signed_file).unwrap();
+    let file = File::new(&args.file, !args.not_signed_file).unwrap();
     let header = file.header();
 
     let (each, remain) = misc::lines_per_file(&file, args.number_of_files).unwrap_or_else(|| {
@@ -38,6 +38,8 @@ pub fn app(args: Option<Args>) {
     );
     fs_extra::dir::create(&target_dir, true).unwrap();
 
+    let headers = misc::read_n_lines(&mut buf_reader, file.header());
+
     for i in 1..=args.number_of_files {
         let r = misc::read_n_lines(&mut buf_reader, each);
         let mut f = std::fs::File::create(&format!(
@@ -48,6 +50,7 @@ pub fn app(args: Option<Args>) {
         ))
         .expect("Unable to create file");
 
+        f.write_all(headers.as_bytes()).expect("Unable to write data");
         f.write_all(r.as_bytes()).expect("Unable to write data");
         println!(
             "Wrote to {}",
@@ -55,23 +58,26 @@ pub fn app(args: Option<Args>) {
         );
     }
 
-    let r = misc::read_n_lines(&mut buf_reader, remain);
-    let mut f = std::fs::File::create(&format!(
-        "{}/{}_{}.csv",
-        &target_dir,
-        file.base_name().unwrap(),
-        args.number_of_files + 1
-    ))
-    .expect("Unable to create file");
-
-    f.write_all(r.as_bytes()).expect("Unable to write data");
-    println!(
-        "Wrote to {}",
-        &format!(
+    if remain > 0 {
+        let r = misc::read_n_lines(&mut buf_reader, remain);
+        let mut f = std::fs::File::create(&format!(
             "{}/{}_{}.csv",
             &target_dir,
             file.base_name().unwrap(),
             args.number_of_files + 1
-        )
-    );
+        ))
+            .expect("Unable to create file");
+
+        f.write_all(headers.as_bytes()).expect("Unable to write data");
+        f.write_all(r.as_bytes()).expect("Unable to write data");
+        println!(
+            "Wrote to {}",
+            &format!(
+                "{}/{}_{}.csv",
+                &target_dir,
+                file.base_name().unwrap(),
+                args.number_of_files + 1
+            )
+        );
+    }
 }

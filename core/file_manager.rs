@@ -1,9 +1,9 @@
 extern crate fs_extra;
 
-use std::iter::Copied;
 use std::ops::Deref;
 use indexed_file::{Indexable, ReadByLine};
 use std::path::Path;
+use std::process::exit;
 
 pub struct File {
     file_path: Box<String>,
@@ -42,7 +42,13 @@ impl File {
             return None;
         };
 
-        let file_path = Box::from(file_p.to_string());
+        let file_path = if std::path::Path::new(&file_p).is_absolute() && std::path::Path::new(&file_p).is_file()  {
+            Box::from(file_p.to_string())
+        } else {
+            eprintln!("Only full path is allowed");
+            exit(1);
+        };
+
 
         Some(File {
             file_path,

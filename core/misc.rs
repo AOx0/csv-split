@@ -1,5 +1,6 @@
+use std::fs::OpenOptions;
+use std::io::Write;
 use std::ops::Range;
-use indexed_file::ReadByLine;
 use crate::*;
 
 pub fn read_line_range(mut file: File, range: Range<usize>) -> Vec<String> {
@@ -23,7 +24,7 @@ pub fn lines_per_file(file: &File, n_files: usize) -> Option<(usize, usize)> {
     }
 }
 
-pub fn gen_names(file: &File, n_files: i32) -> Vec<String> {
+pub fn gen_names(file: &File, n_files: usize) -> Vec<String> {
     let mut result = Vec::<String>::new();
     let base_name = file.base_name().unwrap_or_else(|| {
         exit(0);
@@ -34,4 +35,15 @@ pub fn gen_names(file: &File, n_files: i32) -> Vec<String> {
     }
 
     result
+}
+
+pub fn write_contents_to(path: &str, contents: &[u8]) -> std::io::Result<()> {
+    let mut file = OpenOptions::new()
+        .read(true)
+        .write(true)
+        .create(true)
+        .append(true)
+        .open(path)?;
+    file.write(contents)?;
+    Ok(())
 }

@@ -34,26 +34,21 @@ impl File {
         String::from(self.file_fs.file_name().unwrap().to_str().unwrap())
     }
 
-    pub fn new(file_p: &str, header_line: bool) -> Option<File> {
-        let file = if let Ok(file_p) = indexed_file::File::open_raw(file_p) {
-            file_p
+    pub fn new(file_path: &str, header_line: bool) -> Option<File> {
+        let file = if let Ok(file_path) = indexed_file::File::open_raw(file_path) {
+            file_path
         } else {
             eprintln!("No such file found");
             return None;
         };
 
-        let file_path = if std::path::Path::new(&file_p).is_absolute() && std::path::Path::new(&file_p).is_file()  {
-            Box::from(file_p.to_string())
-        } else {
-            eprintln!("Only full path is allowed");
-            exit(1);
-        };
+        let f = Box::new(file_path.to_string() );
 
 
         Some(File {
-            file_path,
+            file_path: f,
             file,
-            file_fs: Box::from(Path::new(file_p)),
+            file_fs: Box::from(Path::new(file_path)),
             header_line,
         })
     }
@@ -66,11 +61,5 @@ impl File {
         } else {
             None
         }
-    }
-}
-
-impl Clone for File {
-    fn clone(&self) -> Self {
-        File::new(self.file_path.deref(), self.header_line).unwrap()
     }
 }

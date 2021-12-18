@@ -26,13 +26,13 @@ pub fn app(args: Option<Args>) {
     });
 
 
-    let mut arc_buf = BufReader::open(file.file_path.as_str()).unwrap();
+    let mut buf_reader = BufReader::open(file.file_path.as_str()).unwrap();
 
     let target_dir = format!("{}/{}", current_dir().unwrap().display(), &file.base_name().unwrap());
     fs_extra::dir::create(&target_dir, true).unwrap();
 
     for i in 1..=args.number_of_files {
-            let r = misc::read_n_lines(&mut arc_buf, each);
+            let r = misc::read_n_lines(&mut buf_reader, each);
             let mut f = std::fs::File::create(&format!("{}/{}_{}.csv", &target_dir, file.base_name().unwrap() ,i)).expect("Unable to create file");
 
             f.write_all(r.as_bytes()).expect("Unable to write data");
@@ -40,7 +40,7 @@ pub fn app(args: Option<Args>) {
 
     }
 
-    let r = misc::read_n_lines(&mut arc_buf, remain);
+    let r = misc::read_n_lines(&mut buf_reader, remain);
     let mut f = std::fs::File::create(&format!("{}/{}_{}.csv", &target_dir, file.base_name().unwrap() ,args.number_of_files+1)).expect("Unable to create file");
 
     f.write_all(r.as_bytes()).expect("Unable to write data");

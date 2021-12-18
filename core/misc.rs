@@ -1,12 +1,16 @@
-use std::fs::OpenOptions;
-use std::io::Write;
-use std::ops::Range;
+use std::ops::{Add, Range};
 use crate::*;
+use crate::reader::BufReader;
 
-pub fn read_line_range(mut file: File, range: Range<usize>) -> Vec<String> {
-    let mut result = Vec::<String>::new();
-    for i in range {
-        result.push(file.read_line(i));
+
+pub fn read_n_lines(mut file: &mut BufReader, next: usize) -> String {
+
+    let mut result = String::new();
+
+    for _ in 1..=next {
+        let mut buffer = String::new();
+        file.read_line(&mut buffer);
+        result.push_str(buffer.as_str());
     }
 
     result
@@ -37,13 +41,6 @@ pub fn gen_names(file: &File, n_files: usize) -> Vec<String> {
     result
 }
 
-pub fn write_contents_to(path: &str, contents: &[u8]) -> std::io::Result<()> {
-    let mut file = OpenOptions::new()
-        .read(true)
-        .write(true)
-        .create(true)
-        .append(true)
-        .open(path)?;
-    file.write(contents)?;
-    Ok(())
-}
+
+
+

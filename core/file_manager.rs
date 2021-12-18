@@ -6,7 +6,7 @@ use std::path::Path;
 use std::process::exit;
 
 pub struct File {
-    file_path: Box<String>,
+    pub file_path: Box<String>,
     file: indexed_file::File,
     file_fs: Box<Path>,
     header_line: bool,

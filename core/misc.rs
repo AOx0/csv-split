@@ -1,9 +1,7 @@
-use crate::*;
 use crate::reader::BufReader;
-
+use crate::*;
 
 pub fn read_n_lines(file: &mut BufReader, next: usize) -> String {
-
     let mut result = String::new();
 
     for _ in 1..=next {
@@ -39,7 +37,3 @@ pub fn gen_names(file: &File, n_files: usize) -> Vec<String> {
 
     result
 }
-
-
-
-

@@ -1,9 +1,7 @@
 extern crate fs_extra;
 
-use std::ops::Deref;
-use indexed_file::{Indexable, ReadByLine};
+use indexed_file::Indexable;
 use std::path::Path;
-use std::process::exit;
 
 pub struct File {
     pub file_path: Box<String>,
@@ -13,11 +11,6 @@ pub struct File {
 }
 
 impl File {
-
-    pub fn read_line(&mut self, line: usize) -> String {
-        self.file.read_line(line).unwrap().to_string()
-    }
-
     pub fn header(&self) -> usize {
         if self.header_line == true {
             1
@@ -42,8 +35,7 @@ impl File {
             return None;
         };
 
-        let f = Box::new(file_path.to_string() );
-
+        let f = Box::new(file_path.to_string());
 
         Some(File {
             file_path: f,

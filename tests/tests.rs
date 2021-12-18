@@ -77,7 +77,7 @@ mod file_manager {
 #[cfg(test)]
 mod lib {
     use crate::*;
-    use spcsv::{gen_names, lines_per_file};
+    use spcsv::misc::{gen_names, lines_per_file};
 
     #[test]
     fn get_names() {

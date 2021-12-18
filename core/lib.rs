@@ -1,9 +1,16 @@
+use std::ops::{Deref, DerefMut};
+use std::thread;
 use crate::args::Args;
 use file_manager::File;
 use std::process::exit;
+use std::sync::{Arc, Mutex};
+use std::thread::JoinHandle;
 
 pub mod args;
 pub mod file_manager;
+pub mod misc;
+
+
 
 pub fn app(args: Option<Args>) {
     let args: Args = match args {
@@ -11,30 +18,28 @@ pub fn app(args: Option<Args>) {
         None => Args::load(),
     };
 
-    println!("{:?}", args);
-}
+    let file = File::new(&args.file, args.signed_file ).unwrap();
+    let header = file.header();
 
-pub fn lines_per_file(file: &File, n_files: usize) -> Option<(usize, usize)> {
-    let total_lines = file.lines() - file.header();
-    let lines = total_lines as f32 / n_files as f32;
-
-    if lines < 1.0 {
-        None /* Cant place less than a row in each file */
-    } else {
-        let lines = lines.floor() as usize;
-        Some((lines, total_lines - lines * n_files))
-    }
-}
-
-pub fn gen_names(file: &File, n_files: i32) -> Vec<String> {
-    let mut result = Vec::<String>::new();
-    let base_name = file.base_name().unwrap_or_else(|| {
-        exit(0);
+    let (each, remain) = misc::lines_per_file(&file, args.number_of_files).unwrap_or_else(|| {
+        eprintln!("Can't split {} lines between {} files", file.lines()-header, args.number_of_files);
+        exit(1);
     });
 
-    for n in 1..=n_files {
-        result.push(format!("{}_{}.csv", base_name, n));
+    let mut handlers : Vec<JoinHandle<_>> = Vec::new();
+
+    let arc_file = Arc::new(Mutex::new(file));
+
+    for i in 1..=args.number_of_files {
+        let s_file = arc_file.clone();
+        handlers.push(thread::Builder::new().name(format!("thread{}",1)).spawn( move || {
+            let r = misc::read_line_range(s_file.lock().unwrap().deref().clone(), i*each-each+header..i*each+header);
+            println!("i: {} -- {:?}", i, r);
+        }).unwrap())
     }
 
-    result
+    for thread in handlers {
+        thread.join().unwrap();
+    }
+
 }

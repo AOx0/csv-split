@@ -6,6 +6,7 @@ use file_manager::File;
 use std::env::current_dir;
 use std::io::Write;
 use std::process::exit;
+
 pub mod args;
 pub mod file_manager;
 pub mod misc;
@@ -50,12 +51,15 @@ pub fn app(args: Option<Args>) {
         ))
         .expect("Unable to create file");
 
-        f.write_all(headers.as_bytes()).expect("Unable to write data");
+        f.write_all(headers.as_bytes())
+            .expect("Unable to write data");
         f.write_all(r.as_bytes()).expect("Unable to write data");
-        println!(
-            "Wrote to {}",
-            &format!("{}/{}_{}.csv", &target_dir, file.base_name().unwrap(), i)
-        );
+        if args.verbose {
+            println!(
+                "Wrote to {}",
+                &format!("{}/{}_{}.csv", &target_dir, file.base_name().unwrap(), i)
+            );
+        }
     }
 
     if remain > 0 {
@@ -66,18 +70,21 @@ pub fn app(args: Option<Args>) {
             file.base_name().unwrap(),
             args.number_of_files + 1
         ))
-            .expect("Unable to create file");
+        .expect("Unable to create file");
 
-        f.write_all(headers.as_bytes()).expect("Unable to write data");
+        f.write_all(headers.as_bytes())
+            .expect("Unable to write data");
         f.write_all(r.as_bytes()).expect("Unable to write data");
-        println!(
-            "Wrote to {}",
-            &format!(
-                "{}/{}_{}.csv",
-                &target_dir,
-                file.base_name().unwrap(),
-                args.number_of_files + 1
-            )
-        );
+        if args.verbose {
+            println!(
+                "Wrote to {}",
+                &format!(
+                    "{}/{}_{}.csv",
+                    &target_dir,
+                    file.base_name().unwrap(),
+                    args.number_of_files + 1
+                )
+            );
+        }
     }
 }

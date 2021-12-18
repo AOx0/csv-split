@@ -19,6 +19,10 @@ pub struct Args {
     /// When disabled writes remaining rows to the last file (NUMBER_OF_FILES)
     #[clap(short, long)]
     pub(crate) remaining_in_new_file: bool,
+
+    /// Print when file is created
+    #[clap(short, long)]
+    pub(crate) verbose: bool,
 }
 
 impl Args {

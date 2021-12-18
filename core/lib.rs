@@ -1,24 +1,15 @@
 extern crate fs_extra;
 
-use std::borrow::BorrowMut;
-use std::env::{current_dir, set_current_dir};
-use std::fs::OpenOptions;
+use std::env::{current_dir};
 use std::io::Write;
-use std::ops::{Deref, DerefMut};
-use std::thread;
 use crate::args::Args;
 use file_manager::File;
 use std::process::exit;
-use std::sync::{Arc, Mutex};
-use std::thread::JoinHandle;
-use crate::misc::{gen_names};
 use crate::reader::BufReader;
-
 pub mod args;
 pub mod file_manager;
 pub mod misc;
 mod reader;
-
 
 pub fn app(args: Option<Args>) {
     let args: Args = match args {
@@ -40,20 +31,18 @@ pub fn app(args: Option<Args>) {
     let target_dir = format!("{}/{}", current_dir().unwrap().display(), &file.base_name().unwrap());
     fs_extra::dir::create(&target_dir, true).unwrap();
 
-    set_current_dir(&target_dir).unwrap();
-
     for i in 1..=args.number_of_files {
             let r = misc::read_n_lines(&mut arc_buf, each);
-            let mut f = std::fs::File::create(&format!("{}/{}_{}.csv", current_dir().unwrap().display(), file.base_name().unwrap() ,i)).expect("Unable to create file");
+            let mut f = std::fs::File::create(&format!("{}/{}_{}.csv", &target_dir, file.base_name().unwrap() ,i)).expect("Unable to create file");
 
             f.write_all(r.as_bytes()).expect("Unable to write data");
-            println!("Wrote to {}", &format!("{}/{}_{}.csv", current_dir().unwrap().display(), file.base_name().unwrap() ,i) );
+            println!("Wrote to {}", &format!("{}/{}_{}.csv", &target_dir, file.base_name().unwrap() ,i) );
 
     }
 
-    let r = misc::read_n_lines(&mut arc_buf, each);
-    let mut f = std::fs::File::create(&format!("{}/{}_{}.csv", current_dir().unwrap().display(), file.base_name().unwrap() ,args.number_of_files+1)).expect("Unable to create file");
+    let r = misc::read_n_lines(&mut arc_buf, remain);
+    let mut f = std::fs::File::create(&format!("{}/{}_{}.csv", &target_dir, file.base_name().unwrap() ,args.number_of_files+1)).expect("Unable to create file");
 
     f.write_all(r.as_bytes()).expect("Unable to write data");
-    println!("Wrote to {}", &format!("{}/{}_{}.csv", current_dir().unwrap().display(), file.base_name().unwrap() ,args.number_of_files+1) );
+    println!("Wrote to {}", &format!("{}/{}_{}.csv", &target_dir, file.base_name().unwrap() ,args.number_of_files+1) );
 }

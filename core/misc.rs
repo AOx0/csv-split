@@ -1,9 +1,8 @@
-use std::ops::{Add, Range};
 use crate::*;
 use crate::reader::BufReader;
 
 
-pub fn read_n_lines(mut file: &mut BufReader, next: usize) -> String {
+pub fn read_n_lines(file: &mut BufReader, next: usize) -> String {
 
     let mut result = String::new();
 

@@ -35,8 +35,6 @@ pub fn app(args: Option<Args>) {
     });
 
 
-    let names = Arc::new(Mutex::new( gen_names(&file, args.number_of_files)));
-    let arc_file = Arc::new(Mutex::new( File::new(&args.file, args.signed_file ).unwrap()));
     let mut arc_buf = BufReader::open(file.file_path.as_str()).unwrap();
 
     let target_dir = format!("{}/{}", current_dir().unwrap().display(), &file.base_name().unwrap());
@@ -45,24 +43,17 @@ pub fn app(args: Option<Args>) {
     set_current_dir(&target_dir).unwrap();
 
     for i in 1..=args.number_of_files {
-
-
             let r = misc::read_n_lines(&mut arc_buf, each);
+            let mut f = std::fs::File::create(&format!("{}/{}_{}.csv", current_dir().unwrap().display(), file.base_name().unwrap() ,i)).expect("Unable to create file");
 
-
-            let mut f = OpenOptions::new()
-                .read(true)
-                .write(true)
-                .create(true)
-                .append(true)
-                .open(&format!("{}/{}_{}.csv", current_dir().unwrap().display(), file.base_name().unwrap() ,i)).unwrap();
-
-
-            f.write(r.as_bytes()).unwrap();
+            f.write_all(r.as_bytes()).expect("Unable to write data");
             println!("Wrote to {}", &format!("{}/{}_{}.csv", current_dir().unwrap().display(), file.base_name().unwrap() ,i) );
 
     }
 
+    let r = misc::read_n_lines(&mut arc_buf, each);
+    let mut f = std::fs::File::create(&format!("{}/{}_{}.csv", current_dir().unwrap().display(), file.base_name().unwrap() ,args.number_of_files+1)).expect("Unable to create file");
 
-
+    f.write_all(r.as_bytes()).expect("Unable to write data");
+    println!("Wrote to {}", &format!("{}/{}_{}.csv", current_dir().unwrap().display(), file.base_name().unwrap() ,args.number_of_files+1) );
 }

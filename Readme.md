@@ -17,7 +17,7 @@ cargo install split-csv
 ## Usage
 
 ```
-spcsv 0.0.4
+spcsv 0.0.5
 Split a lage csv file into multiple files
 
 USAGE:
@@ -25,17 +25,14 @@ USAGE:
 
 ARGS:
     <FILE>               The csv file to split
-    <NUMBER_OF_FILES>    The number of files to be created with the contents of the original
+    <NUMBER_OF_FILES>    The number of files to be created with the contents of the original csv
                          file
 
 OPTIONS:
-    -h, --help                     Print help information
-    -n, --not-signed-file          Flag to indicate the first line of FILE is a header line
-    -r, --remaining-in-new-file    Flag to write remaining lines at an extra file (NUMBER_OF_FILES +
-                                   1). When disabled writes remaining rows to the last file
-                                   (NUMBER_OF_FILES)
-    -v, --verbose                  Print when file is created
-    -V, --version                  Print version information
+    -h, --help               Print help information
+    -n, --not-signed-file    The first line of FILE is NOT a header line. [By default it is]
+    -v, --verbose            Print when file is created
+    -V, --version            Print version information
 ```
 
 

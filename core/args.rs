@@ -7,18 +7,13 @@ pub struct Args {
     #[clap(required = true)]
     pub(crate) file: String,
 
-    /// The number of files to be created with the contents of the original file
+    /// The number of files to be created with the contents of the original csv file
     #[clap(required = true)]
     pub(crate) number_of_files: usize,
 
-    /// Flag to indicate the first line of FILE is a header line
+    /// The first line of FILE is NOT a header line. [By default it is]
     #[clap(short, long)]
     pub(crate) not_signed_file: bool,
-
-    /// Flag to write remaining lines at an extra file (NUMBER_OF_FILES + 1).
-    /// When disabled writes remaining rows to the last file (NUMBER_OF_FILES)
-    #[clap(short, long)]
-    pub(crate) remaining_in_new_file: bool,
 
     /// Print when file is created
     #[clap(short, long)]

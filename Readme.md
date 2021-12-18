@@ -12,7 +12,10 @@ Simply run:
 cargo install split-csv
 ```
 
-
+Or use the GitHub version:
+```
+cargo install --git https://github.com/AOx0/csv-split
+```
 
 ## Usage
 

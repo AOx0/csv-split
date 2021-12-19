@@ -15,6 +15,10 @@ pub struct Args {
     #[clap(short, long)]
     pub(crate) not_signed_file: bool,
 
+    /// Write remaining lines in the last file [By default remaining rows are written to a new extra file]
+    #[clap(short, long)]
+    pub(crate) remaining_in_last: bool,
+
     /// Print when file is created
     #[clap(short, long)]
     pub(crate) verbose: bool,

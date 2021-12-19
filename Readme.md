@@ -32,10 +32,12 @@ ARGS:
                          file
 
 OPTIONS:
-    -h, --help               Print help information
-    -n, --not-signed-file    The first line of FILE is NOT a header line. [By default it is]
-    -v, --verbose            Print when file is created
-    -V, --version            Print version information
+    -h, --help                 Print help information
+    -n, --not-signed-file      The first line of FILE is NOT a header line. [By default it is]
+    -r, --remaining-in-last    Write remaining lines in the last file [By default remaining rows are
+                               written to a new extra file]
+    -v, --verbose              Print when file is created
+    -V, --version              Print version information
 ```
 
 

@@ -56,13 +56,29 @@ pub fn app(args: Option<Args>) {
         f.write_all(r.as_bytes()).expect("Unable to write data");
         if args.verbose {
             println!(
-                "Wrote to {}",
-                &format!("{}/{}_{}.csv", &target_dir, file.base_name().unwrap(), i)
+                "Wrote {} rows to {}", each, &format!("{}/{}_{}.csv", &target_dir, file.base_name().unwrap(), i)
             );
+        }
+
+        if i == args.number_of_files && args.remaining_in_last && remain > 0 {
+            let r = misc::read_n_lines(&mut buf_reader, remain);
+
+            f.write_all(r.as_bytes()).expect("Unable to write data");
+            if args.verbose {
+                println!(
+                    "Wrote {} remaining rows to {}", remain,
+                    &format!(
+                        "{}/{}_{}.csv",
+                        &target_dir,
+                        file.base_name().unwrap(),
+                        i
+                    )
+                );
+            }
         }
     }
 
-    if remain > 0 {
+    if remain > 0 && !args.remaining_in_last {
         let r = misc::read_n_lines(&mut buf_reader, remain);
         let mut f = std::fs::File::create(&format!(
             "{}/{}_{}.csv",
@@ -70,14 +86,14 @@ pub fn app(args: Option<Args>) {
             file.base_name().unwrap(),
             args.number_of_files + 1
         ))
-        .expect("Unable to create file");
+            .expect("Unable to create file");
 
         f.write_all(headers.as_bytes())
             .expect("Unable to write data");
         f.write_all(r.as_bytes()).expect("Unable to write data");
         if args.verbose {
             println!(
-                "Wrote to {}",
+                "Wrote {} remaining rows to {}", remain,
                 &format!(
                     "{}/{}_{}.csv",
                     &target_dir,

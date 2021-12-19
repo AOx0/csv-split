@@ -2,6 +2,7 @@ set positional-arguments
 
 alias cup := commit_upgrade
 alias vup := upgrade
+alias up := up_publish
 alias pub := publish
 
 default:
@@ -29,6 +30,9 @@ update readme:
 
 commit msg readme="Readme.md": (update readme)
     git commit -am "{{msg}}"
+
+try_commit msg readme="Readme.md": (update readme)
+    -git commit -am "{{msg}}"
 
 push msg: (commit msg)
     git push
@@ -77,8 +81,12 @@ upgrade type="minor": && commit_upgrade
 commit_upgrade:
     cargo check --release
     git add "Cargo.toml" "Cargo.lock"
-    git commit -am "$(cargo run --release --quiet -- --version)"
+    git commit -m "Version upgrade: $(cargo run --release --quiet -- --version)"
 
-publish type="minor": (upgrade type) 
-    git push
+up_publish type="minor": (upgrade type) (try_commit "$(cargo run --release --quiet -- --version)")
+    -git push
+    cargo publish
+
+publish: (try_commit "$(cargo run --release --quiet -- --version)")
+    -git push
     cargo publish

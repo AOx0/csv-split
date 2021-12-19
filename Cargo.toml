@@ -10,7 +10,7 @@ description = "Split a lage csv file into multiple files"
 categories = ["command-line-utilities"]
 
 license = "MIT"
-version = "0.0.6"
+version = "0.0.7"
 
 rust-version = "1.57"
 edition = "2021"

@@ -24,7 +24,7 @@ update readme:
         f.close()
 
 commit msg readme="Readme.md": (update readme)
-    git commit -am {{msg}}
+    git commit -am "{{msg}}"
 
 push msg: (commit msg)
     git push

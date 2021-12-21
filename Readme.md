@@ -55,5 +55,5 @@ built_executable: ./target/release/spcsv
 combined_benchmark_file: ./benchmarks/all-benchmarks.json
 executables_dir: ./benchmarks/executables
 html_output_file: ./benchmarks/index.html
-revision_range: "320e28367ae45ee9bc3de2938e2b284d51238d2d..HEAD"
+revision_range: "320e28367ae45ee9bc3de2938e2b284d51238d2d..ee57d2915f16b8d36a21ba22957c5cbec3b78119"
 ```

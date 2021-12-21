@@ -171,6 +171,12 @@ dependencies = [
 ]
 
 [[package]]
+name = "sinner"
+version = "0.1.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "d00bbb9050905a9371bd8ec430490436af03ecda0f71e4cf52d5c2a1ba3b8fe4"
+
+[[package]]
 name = "split-csv"
 version = "0.0.8"
 dependencies = [
@@ -178,6 +184,7 @@ dependencies = [
  "fs_extra",
  "indexed_file",
  "lazy_static",
+ "sinner",
 ]
 
 [[package]]

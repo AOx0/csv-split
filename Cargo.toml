@@ -37,3 +37,4 @@ lazy_static = "1.4.0"
 clap = { version="3.0.0-rc.7", features=["derive"]}
 indexed_file = "0.1.2"
 fs_extra = "1.2.0"
+sinner = "0.1.2"

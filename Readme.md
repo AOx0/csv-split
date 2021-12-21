@@ -1,4 +1,6 @@
-# split-csv
+# multi split-csv
+
+Experimental branch
 
 Simple command to split into n files the contents of one big csv.
 
@@ -41,8 +43,17 @@ spcsv COVID19.csv 100
 
 The example above will split the lines of `COVID19.csv` along a hundred files with the names: `COVID19_1.csv`, `COVID19_2.csv`, `COVID19_3.csv`, `...```
 spcsv COVID19.csv 100
+
+
+chronologer.yaml:
+```yaml
+benchmarks_dir: ./benchmarks/benchmarks
+benchmark_runs: 100
+benchmark_task: "{executable} /Users/alejandro/Downloads/Covid.csv 100"
+build_command: "cargo build --release"
+built_executable: ./target/release/spcsv
+combined_benchmark_file: ./benchmarks/all-benchmarks.json
+executables_dir: ./benchmarks/executables
+html_output_file: ./benchmarks/index.html
+revision_range: "320e28367ae45ee9bc3de2938e2b284d51238d2d..HEAD"
 ```
-
-
-
-The example above will split the lines of `COVID19.csv` along a hundred files with the names: `COVID19_1.csv`, `COVID19_2.csv`, `COVID19_3.csv`, `...`

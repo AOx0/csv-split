@@ -84,23 +84,23 @@ pub fn app(args: Option<Args>) {
                 );
             }
 
-            if i == args.number_of_files && args.remaining_in_last && remain > 0 {
-                let r = misc::read_n_lines(shared.reader.lock().unwrap().borrow_mut(), remain);
+            if i == args.number_of_files && remain > 0 {
+                if args.remaining_in_last{
+                    let r = misc::read_n_lines(shared.reader.lock().unwrap().borrow_mut(), remain);
 
-                f.write_all(r.as_bytes()).expect("Unable to write data");
-                if args.verbose {
-                    println!(
-                        "Wrote {} remaining rows to {}", remain,
-                        &format!(
-                            "{}/{}_{}.csv",
-                            &shared.taget_dir.lock().unwrap(),
-                            shared.file.lock().unwrap().base_name().unwrap(),
-                            i
-                        )
-                    );
-                }
-            } else if i == args.number_of_files && !args.remaining_in_last && remain > 0 {
-                if remain > 0 && !args.remaining_in_last {
+                    f.write_all(r.as_bytes()).expect("Unable to write data");
+                    if args.verbose {
+                        println!(
+                            "Wrote {} remaining rows to {}", remain,
+                            &format!(
+                                "{}/{}_{}.csv",
+                                &shared.taget_dir.lock().unwrap(),
+                                shared.file.lock().unwrap().base_name().unwrap(),
+                                i
+                            )
+                        );
+                    }
+                } else {
                     let r = misc::read_n_lines(shared.reader.lock().unwrap().borrow_mut(), remain);
                     let mut f = std::fs::File::create(&format!(
                         "{}/{}_{}.csv",

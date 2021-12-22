@@ -67,20 +67,25 @@ pub fn app(args: Option<Args>) {
 
     for i in 1..=args.number_of_files {
         handlers.push(thread::Builder::new().name(format!("thread{}",1)).spawn( move || {
+            let target_dir = &shared.taget_dir.clone();
+            let name = shared.file.base_name().unwrap().clone();
+            let headers = shared.headers.clone();
+            let headers = headers.as_bytes();
+
             let r = misc::read_n_lines(shared.reader.lock().unwrap().borrow_mut(), each);
             let mut f = std::fs::File::create( & format!(
                         "{}/{}_{}.csv",
-                        &shared.taget_dir,
-                        shared.file.base_name().unwrap(),
+                        target_dir,
+                        name,
                         i
                     )).expect("Unable to create file");
 
-            f.write_all(shared.headers.as_bytes())
+            f.write_all(headers)
                 .expect("Unable to write data");
             f.write_all(r.as_bytes()).expect("Unable to write data");
             if args.verbose {
                 println!(
-                    "Wrote {} rows to {}", each, &format!("{}/{}_{}.csv", &shared.taget_dir, shared.file.base_name().unwrap(), i)
+                    "Wrote {} rows to {}", each, &format!("{}/{}_{}.csv", target_dir, name, i)
                 );
             }
 
@@ -94,8 +99,8 @@ pub fn app(args: Option<Args>) {
                             "Wrote {} remaining rows to {}", remain,
                             &format!(
                                 "{}/{}_{}.csv",
-                                &shared.taget_dir,
-                                shared.file.base_name().unwrap(),
+                                target_dir,
+                                name,
                                 i
                             )
                         );
@@ -104,13 +109,13 @@ pub fn app(args: Option<Args>) {
                     let r = misc::read_n_lines(shared.reader.lock().unwrap().borrow_mut(), remain);
                     let mut f = std::fs::File::create(&format!(
                         "{}/{}_{}.csv",
-                        &shared.taget_dir,
-                        shared.file.base_name().unwrap(),
+                        target_dir,
+                        name,
                         args.number_of_files + 1
                     ))
                         .expect("Unable to create file");
 
-                    f.write_all(shared.headers.as_bytes())
+                    f.write_all(headers)
                         .expect("Unable to write data");
                     f.write_all(r.as_bytes()).expect("Unable to write data");
                     if args.verbose {
@@ -118,8 +123,8 @@ pub fn app(args: Option<Args>) {
                             "Wrote {} remaining rows to {}", remain,
                             &format!(
                                 "{}/{}_{}.csv",
-                                &shared.taget_dir,
-                                shared.file.base_name().unwrap(),
+                                target_dir,
+                                name,
                                 args.number_of_files + 1
                             )
                         );

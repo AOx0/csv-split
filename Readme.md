@@ -45,7 +45,11 @@ The example above will split the lines of `COVID19.csv` along a hundred files wi
 spcsv COVID19.csv 100
 
 
+
+## Benchmarks
+
 chronologer.yaml:
+
 ```yaml
 benchmarks_dir: ./benchmarks/benchmarks
 benchmark_runs: 100
@@ -57,3 +61,13 @@ executables_dir: ./benchmarks/executables
 html_output_file: ./benchmarks/index.html
 revision_range: "320e28367ae45ee9bc3de2938e2b284d51238d2d..ee57d2915f16b8d36a21ba22957c5cbec3b78119"
 ```
+
+
+
+Comparison of benchmark results for `spcsv v0.0.8` and `multihread`'s `HEAD`.  
+
+![](https://raw.githubusercontent.com/AOx0/csv-split/multithread/misc/Test.png)
+
+
+
+And the evolution of stable threads over las 10  `multihread`'s commits:

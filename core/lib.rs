@@ -1,13 +1,13 @@
 extern crate fs_extra;
 
-use std::borrow::BorrowMut;
+
 use crate::args::Args;
 use crate::reader::BufReader;
 use file_manager::File;
 use std::env::current_dir;
 use std::io::Write;
 use std::process::exit;
-use std::sync::{Arc, Mutex};
+use std::sync::{Arc};
 use std::thread;
 use std::thread::JoinHandle;
 use sinner::Sin;
@@ -21,7 +21,6 @@ mod reader;
 struct Shared {
     taget_dir: Arc<String>,
     headers: Arc<String>,
-    reader: Arc<Mutex<BufReader>>,
     file: Arc<File>
 }
 
@@ -56,23 +55,24 @@ pub fn app(args: Option<Args>) {
 
     let mut handlers : Vec<JoinHandle<_>> = Vec::new();
 
-    let buf_reader = Arc::new(Mutex::new(buf_reader));
-
     let shared = Sin::new(Shared {
         taget_dir: Arc::new(target_dir),
         headers:  Arc::new(headers),
-        reader: buf_reader.clone(),
         file:  Arc::new(file)
     });
 
     for i in 1..=args.number_of_files {
+        let r =  misc::read_n_lines(&mut buf_reader, each);
+        let op =  if i == args.number_of_files && remain != 0 {
+            Some(misc::read_n_lines(&mut buf_reader, remain))
+        } else { None };
+
         handlers.push(thread::Builder::new().name(format!("thread{}",1)).spawn( move || {
             let target_dir = &shared.taget_dir.clone();
             let name = shared.file.base_name().unwrap().clone();
             let headers = shared.headers.clone();
             let headers = headers.as_bytes();
 
-            let r = misc::read_n_lines(shared.reader.lock().unwrap().borrow_mut(), each);
             let mut f = std::fs::File::create( & format!(
                         "{}/{}_{}.csv",
                         target_dir,
@@ -91,9 +91,7 @@ pub fn app(args: Option<Args>) {
 
             if i == args.number_of_files && remain > 0 {
                 if args.remaining_in_last{
-                    let r = misc::read_n_lines(shared.reader.lock().unwrap().borrow_mut(), remain);
-
-                    f.write_all(r.as_bytes()).expect("Unable to write data");
+                    f.write_all(op.unwrap().as_bytes()).expect("Unable to write data");
                     if args.verbose {
                         println!(
                             "Wrote {} remaining rows to {}", remain,
@@ -106,7 +104,6 @@ pub fn app(args: Option<Args>) {
                         );
                     }
                 } else {
-                    let r = misc::read_n_lines(shared.reader.lock().unwrap().borrow_mut(), remain);
                     let mut f = std::fs::File::create(&format!(
                         "{}/{}_{}.csv",
                         target_dir,
@@ -117,7 +114,7 @@ pub fn app(args: Option<Args>) {
 
                     f.write_all(headers)
                         .expect("Unable to write data");
-                    f.write_all(r.as_bytes()).expect("Unable to write data");
+                    f.write_all(op.unwrap().as_bytes()).expect("Unable to write data");
                     if args.verbose {
                         println!(
                             "Wrote {} remaining rows to {}", remain,

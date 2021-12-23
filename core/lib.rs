@@ -1,16 +1,15 @@
 extern crate fs_extra;
 
-
 use crate::args::Args;
 use crate::reader::BufReader;
 use file_manager::File;
+use sinner::Sin;
 use std::env::current_dir;
 use std::io::Write;
 use std::process::exit;
-use std::sync::{Arc};
+use std::sync::Arc;
 use std::thread;
 use std::thread::JoinHandle;
-use sinner::Sin;
 
 pub mod args;
 pub mod file_manager;
@@ -21,7 +20,7 @@ mod reader;
 struct Shared {
     taget_dir: Arc<String>,
     headers: Arc<String>,
-    file: Arc<File>
+    file: Arc<File>,
 }
 
 pub fn app(args: Option<Args>) {
@@ -53,82 +52,85 @@ pub fn app(args: Option<Args>) {
 
     let headers = misc::read_n_lines(&mut buf_reader, file.header());
 
-    let mut handlers : Vec<JoinHandle<_>> = Vec::new();
+    let mut handlers: Vec<JoinHandle<_>> = Vec::new();
 
     let shared = Sin::new(Shared {
         taget_dir: Arc::new(target_dir),
-        headers:  Arc::new(headers),
-        file:  Arc::new(file)
+        headers: Arc::new(headers),
+        file: Arc::new(file),
     });
 
     for i in 1..=args.number_of_files {
-        let r =  misc::read_n_lines(&mut buf_reader, each);
-        let op =  if i == args.number_of_files && remain != 0 {
+        let r = misc::read_n_lines(&mut buf_reader, each);
+        let op = if i == args.number_of_files && remain != 0 {
             Some(misc::read_n_lines(&mut buf_reader, remain))
-        } else { None };
+        } else {
+            None
+        };
 
-        handlers.push(thread::Builder::new().name(format!("thread{}",1)).spawn( move || {
-            let target_dir = &shared.taget_dir.clone();
-            let name = shared.file.base_name().unwrap().clone();
-            let headers = shared.headers.clone();
-            let headers = headers.as_bytes();
+        handlers.push(
+            thread::Builder::new()
+                .name(format!("thread{}", 1))
+                .spawn(move || {
+                    let target_dir = &shared.taget_dir.clone();
+                    let name = shared.file.base_name().unwrap().clone();
+                    let headers = shared.headers.clone();
+                    let headers = headers.as_bytes();
 
-            let mut f = std::fs::File::create( & format!(
-                        "{}/{}_{}.csv",
-                        target_dir,
-                        name,
-                        i
-                    )).expect("Unable to create file");
+                    let mut f =
+                        std::fs::File::create(&format!("{}/{}_{}.csv", target_dir, name, i))
+                            .expect("Unable to create file");
 
-            f.write_all(headers)
-                .expect("Unable to write data");
-            f.write_all(r.as_bytes()).expect("Unable to write data");
-            if args.verbose {
-                println!(
-                    "Wrote {} rows to {}", each, &format!("{}/{}_{}.csv", target_dir, name, i)
-                );
-            }
-
-            if i == args.number_of_files && remain > 0 {
-                if args.remaining_in_last{
-                    f.write_all(op.unwrap().as_bytes()).expect("Unable to write data");
+                    f.write_all(headers).expect("Unable to write data");
+                    f.write_all(r.as_bytes()).expect("Unable to write data");
                     if args.verbose {
                         println!(
-                            "Wrote {} remaining rows to {}", remain,
-                            &format!(
-                                "{}/{}_{}.csv",
-                                target_dir,
-                                name,
-                                i
-                            )
+                            "Wrote {} rows to {}",
+                            each,
+                            &format!("{}/{}_{}.csv", target_dir, name, i)
                         );
                     }
-                } else {
-                    let mut f = std::fs::File::create(&format!(
-                        "{}/{}_{}.csv",
-                        target_dir,
-                        name,
-                        args.number_of_files + 1
-                    ))
-                        .expect("Unable to create file");
 
-                    f.write_all(headers)
-                        .expect("Unable to write data");
-                    f.write_all(op.unwrap().as_bytes()).expect("Unable to write data");
-                    if args.verbose {
-                        println!(
-                            "Wrote {} remaining rows to {}", remain,
-                            &format!(
+                    if i == args.number_of_files && remain > 0 {
+                        if args.remaining_in_last {
+                            f.write_all(op.unwrap().as_bytes())
+                                .expect("Unable to write data");
+                            if args.verbose {
+                                println!(
+                                    "Wrote {} remaining rows to {}",
+                                    remain,
+                                    &format!("{}/{}_{}.csv", target_dir, name, i)
+                                );
+                            }
+                        } else {
+                            let mut f = std::fs::File::create(&format!(
                                 "{}/{}_{}.csv",
                                 target_dir,
                                 name,
                                 args.number_of_files + 1
-                            )
-                        );
+                            ))
+                            .expect("Unable to create file");
+
+                            f.write_all(headers).expect("Unable to write data");
+                            f.write_all(op.unwrap().as_bytes())
+                                .expect("Unable to write data");
+                            if args.verbose {
+                                println!(
+                                    "Wrote {} remaining rows to {}",
+                                    remain,
+                                    &format!(
+                                        "{}/{}_{}.csv",
+                                        target_dir,
+                                        name,
+                                        args.number_of_files + 1
+                                    )
+                                );
+                            }
+                        }
                     }
-                }
-            }
-        }).unwrap());
+                })
+                .unwrap(),
+        );
     }
 
     for handler in handlers {

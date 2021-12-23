@@ -64,7 +64,7 @@ revision_range: "320e28367ae45ee9bc3de2938e2b284d51238d2d..ee57d2915f16b8d36a21b
 
 
 
-Comparison of benchmarking results for `spcsv v0.0.8` and `multihread`'s `HEAD` splitting 12,133,531 rows from a csv of 1.8G of size:
+Comparison of benchmarking results for `spcsv v0.0.8` and `multihread`'s `HEAD` splitting 12,133,531 rows from a csv of 1.8G of size into a 100 files:
 
 ![](https://raw.githubusercontent.com/AOx0/csv-split/multithread/misc/Test.png)
 

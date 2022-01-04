@@ -10,7 +10,7 @@ description = "Split a lage csv file into multiple files"
 categories = ["command-line-utilities"]
 
 license = "MIT"
-version = "0.0.8"
+version = "0.0.9"
 
 rust-version = "1.57"
 edition = "2021"
@@ -34,6 +34,6 @@ path = "tests/tests.rs"
 lazy_static = "1.4.0"
 
 [dependencies]
-clap = { version="3.0.0-rc.7", features=["derive"]}
+clap = { version="3.0.1", features=["derive"]}
 indexed_file = "0.1.2"
 fs_extra = "1.2.0"

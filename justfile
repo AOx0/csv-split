@@ -1,13 +1,17 @@
-set positional-arguments
+set dotenv-load := false
 
-alias cup := commit_upgrade
-alias vup := upgrade
+#Fire and forget option
 alias up := up_publish
+
+
+alias vup := upgrade
+alias cup := commit_upgrade
 alias pub := publish
 
 default:
   @just --list --unsorted
 
+#Updates the  help message within Readme.md
 update readme:
     #!/usr/bin/env python3
     import subprocess
@@ -37,7 +41,7 @@ try_commit msg readme="Readme.md": (update readme)
 push msg: (commit msg)
     git push
 
-# type must be minor,middle or major
+# Upgrade version within Cargo.toml. type must be minor, middle or major
 upgrade type="minor": && commit_upgrade
     #!/usr/bin/env python3
     import sys
@@ -83,10 +87,12 @@ commit_upgrade:
     git add "Cargo.toml" "Cargo.lock"
     git commit -m "Version upgrade: $(cargo run --release --quiet -- --version)"
 
+#Fire and forget option
 up_publish type="minor": (upgrade type) (try_commit "$(cargo run --release --quiet -- --version)")
     -git push
     cargo publish
 
+#Publish to crates.io
 publish: (try_commit "$(cargo run --release --quiet -- --version)")
     -git push
     cargo publish

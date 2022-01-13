@@ -1,6 +1,6 @@
 [package]
 name = "split-csv"
-authors = ["AOx0 "]
+authors = ["AOx0 <aoxo.contact@gmail.com>"]
 
 readme = "Readme.md"
 repository = "https://github.com/AOx0/csv-split"
@@ -10,7 +10,7 @@ description = "Split a lage csv file into multiple files"
 categories = ["command-line-utilities"]
 
 license = "MIT"
-version = "0.0.9"
+version = "0.1.0"
 
 rust-version = "1.57"
 edition = "2021"
@@ -34,7 +34,8 @@ path = "tests/tests.rs"
 lazy_static = "1.4.0"
 
 [dependencies]
-clap = { version="3.0.1", features=["derive"]}
+tokio = { version="1.15.0", features=["full"] }
+futures = "0.3.19"
+clap = { version="3.0.6", features=["derive"]}
 indexed_file = "0.1.2"
 fs_extra = "1.2.0"
-sinner = "0.1.2"

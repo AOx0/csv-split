@@ -41,7 +41,7 @@ pub fn gen_paths(file: &File, n_files: usize) -> Vec<String> {
         .collect()
 }
 
-fn gen_names(file: &File, n_files: usize) -> Vec<String> {
+pub fn gen_names(file: &File, n_files: usize) -> Vec<String> {
     let mut result = Vec::<String>::new();
     let base_name = file.base_name().unwrap_or_else(|| {
         exit(0);

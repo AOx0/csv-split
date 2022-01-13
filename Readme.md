@@ -22,7 +22,7 @@ cargo install --git https://github.com/AOx0/csv-split
 ## Usage
 
 ```HELP
-spcsv 0.1.0
+spcsv 0.1.1
 Split a lage csv file into multiple files
 
 USAGE:

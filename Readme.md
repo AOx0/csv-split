@@ -81,7 +81,7 @@ spcsv Covid.csv 10000
 ![][image-4]
 
 
-[image-1]:	https://raw.githubusercontent.com/10files.png
-[image-2]:	https://raw.githubusercontent.com/50files.png
-[image-3]:	https://raw.githubusercontent.com/100files.png
-[image-4]:	https://raw.githubusercontent.com/10000files.png
+[image-1]:	https://raw.githubusercontent.com/AOx0/csv-split/multithread/misc/10files.png
+[image-2]:	https://raw.githubusercontent.com/AOx0/csv-split/multithread/misc/50files.png
+[image-3]:	https://raw.githubusercontent.com/AOx0/csv-split/multithread/misc/100files.png
+[image-4]:	https://raw.githubusercontent.com/AOx0/csv-split/multithread/misc/10000files.png

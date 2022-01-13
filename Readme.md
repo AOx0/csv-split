@@ -22,10 +22,24 @@ cargo install --git https://github.com/AOx0/csv-split
 ## Usage
 
 ```HELP
-spcsv 0.0.9
+spcsv 0.1.0
 Split a lage csv file into multiple files
 
-error: could not compile `sinner` due to previous error
+USAGE:
+    spcsv [OPTIONS] <FILE> <NUMBER_OF_FILES>
+
+ARGS:
+    <FILE>               The csv file to split
+    <NUMBER_OF_FILES>    The number of files to be created with the contents of the original csv
+                         file
+
+OPTIONS:
+    -h, --help                 Print help information
+    -n, --not-signed-file      The first line of FILE is NOT a header line. [By default it is]
+    -r, --remaining-in-last    Write remaining lines in the last file [By default remaining rows are
+                               written to a new extra file]
+    -v, --verbose              Print when file is created
+    -V, --version              Print version information
 ```
 
 
@@ -36,41 +50,38 @@ Example:
 spcsv COVID19.csv 100
 ```
 
-
-
-The example above will split the lines of `COVID19.csv` along a hundred files with the names: `COVID19_1.csv`, `COVID19_2.csv`, `COVID19_3.csv`, `...```
-spcsv COVID19.csv 100
+The example above will split the lines of `Covid.csv` along a hundred files with the names: `Covid_1.csv`, `Covid_2.csv`, `Covid_3.csv`, `...`.
 
 
 
 ## Benchmarks
 
-chronologer.yaml:
-
-```yaml
-benchmarks_dir: ./benchmarks/benchmarks
-benchmark_runs: 100
-benchmark_task: "{executable} /Users/alejandro/Downloads/Covid.csv 100"
-build_command: "cargo build --release"
-built_executable: ./target/release/spcsv
-combined_benchmark_file: ./benchmarks/all-benchmarks.json
-executables_dir: ./benchmarks/executables
-html_output_file: ./benchmarks/index.html
-revision_range: "320e28367ae45ee9bc3de2938e2b284d51238d2d..ee57d2915f16b8d36a21ba22957c5cbec3b78119"
+Comparison of benchmarking results for `spcsv v0.0.8` and `spcsv v0.1.0` splitting 12,133,531 rows from a CSV if 1.8G of size into 10 files:
 ```
+spcsv Covid.csv 10
+```
+![][image-1]
+
+Splitting the CSV into 50 files:
+```
+spcsv Covid.csv 50
+```
+![][image-2]
+
+Splitting the CSV into 100 files:
+```
+spcsv Covid.csv 100
+```
+![][image-3]
+
+Splitting the CSV into 10000 files:
+```
+spcsv Covid.csv 10000
+```
+![][image-4]
 
 
-
-Comparison of benchmarking results for `spcsv v0.0.8` and `multihread`'s `HEAD` splitting 12,133,531 rows from a csv of 1.8G of size into a 100 files:
-
-![](https://raw.githubusercontent.com/AOx0/csv-split/multithread/misc/Test.png)
-
-
-
-And the evolution of threads error range over the last 10 `multihread`'s commits:
-
-![](https://raw.githubusercontent.com/AOx0/csv-split/multithread/misc/Test2.png)
-
-
-
-Conclusion: Up to now, is better to stick with the stable non-multithread version `v0.0.8`
+[image-1]:	https://raw.githubusercontent.com/10files.png
+[image-2]:	https://raw.githubusercontent.com/50files.png
+[image-3]:	https://raw.githubusercontent.com/100files.png
+[image-4]:	https://raw.githubusercontent.com/10000files.png

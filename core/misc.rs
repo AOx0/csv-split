@@ -25,7 +25,23 @@ pub fn lines_per_file(file: &File, n_files: usize) -> Option<(usize, usize)> {
     }
 }
 
-pub fn gen_names(file: &File, n_files: usize) -> Vec<String> {
+pub fn get_target_directory(file: &File) -> String {
+    format!(
+        "{}/{}",
+        current_dir().unwrap().display(),
+        file.base_name().unwrap()
+    )
+}
+
+pub fn gen_paths(file: &File, n_files: usize) -> Vec<String> {
+    let names = misc::gen_names(file, n_files);
+    names
+        .iter()
+        .map(|a| format!("{}/{}", get_target_directory(file), a))
+        .collect()
+}
+
+fn gen_names(file: &File, n_files: usize) -> Vec<String> {
     let mut result = Vec::<String>::new();
     let base_name = file.base_name().unwrap_or_else(|| {
         exit(0);
@@ -36,4 +52,11 @@ pub fn gen_names(file: &File, n_files: usize) -> Vec<String> {
     }
 
     result
+}
+
+#[macro_export]
+macro_rules! b_file {
+    ($f: expr) => {
+        $f.clone().lock().unwrap().deref_mut()
+    };
 }
